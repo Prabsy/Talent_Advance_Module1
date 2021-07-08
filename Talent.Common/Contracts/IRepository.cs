@@ -12,7 +12,6 @@ namespace Talent.Common.Contracts
         T Create();
         Task<IEnumerable<T>> Get(Expression<Func<T, bool>> predicate);
         Task<IEnumerable<T>> GetAll();
-
         Task<T> GetByIdAsync(object id);
         Task Add(T entity);
         Task Update(T entity);

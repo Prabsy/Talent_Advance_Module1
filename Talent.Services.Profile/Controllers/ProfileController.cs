@@ -33,10 +33,10 @@ namespace Talent.Services.Profile.Controllers
         private readonly IUserAppContext _userAppContext;
         private readonly IRepository<User> _userRepository;
         private readonly IRepository<UserLanguage> _userLanguageRepository;
-        private readonly IRepository<UserExperience> _userExperienceRepository;
         private readonly IRepository<UserDescription> _personDescriptionRespository;
         private readonly IRepository<UserAvailability> _userAvailabilityRepository;
         private readonly IRepository<UserSkill> _userSkillRepository;
+        private readonly IRepository<UserExperience> _userExperienceRepository;
         private readonly IRepository<UserEducation> _userEducationRepository;
         private readonly IRepository<UserCertification> _userCertificationRepository;
         private readonly IRepository<UserLocation> _userLocationRepository;
@@ -47,16 +47,16 @@ namespace Talent.Services.Profile.Controllers
         private readonly IAwsService _awsService;
         private readonly string _profileImageFolder;
 
+        //dependency injection
         public ProfileController(IBusClient busClient,
             IProfileService profileService,
             IFileService documentService,
             IRepository<User> userRepository,
             IRepository<UserLanguage> userLanguageRepository,
-            IRepository<UserExperience> userExperienceRepository,
-
             IRepository<UserDescription> personDescriptionRepository,
             IRepository<UserAvailability> userAvailabilityRepository,
             IRepository<UserSkill> userSkillRepository,
+            IRepository<UserExperience> userExperienceRepository,
             IRepository<UserEducation> userEducationRepository,
             IRepository<UserCertification> userCertificationRepository,
             IRepository<UserLocation> userLocationRepository,
@@ -74,9 +74,9 @@ namespace Talent.Services.Profile.Controllers
             _userRepository = userRepository;
             _personDescriptionRespository = personDescriptionRepository;
             _userLanguageRepository = userLanguageRepository;
-            _userExperienceRepository = userExperienceRepository;
             _userAvailabilityRepository = userAvailabilityRepository;
             _userSkillRepository = userSkillRepository;
+            _userExperienceRepository = userExperienceRepository;
             _userEducationRepository = userEducationRepository;
             _userCertificationRepository = userCertificationRepository;
             _userLocationRepository = userLocationRepository;
@@ -141,6 +141,9 @@ namespace Talent.Services.Profile.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
         public async Task<IActionResult> GetLanguages(String id = "")
         {
+            //Your code here;
+            // throw new NotImplementedException();
+
             String talentId = String.IsNullOrWhiteSpace(id) ? _userAppContext.CurrentUserId : id;
             var languages = await _profileService.GetLanguages(talentId);
 
@@ -151,6 +154,9 @@ namespace Talent.Services.Profile.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
         public async Task<ActionResult> AddLanguage([FromBody] AddLanguageViewModel language)
         {
+            //Your code here;
+            // throw new NotImplementedException();
+
             if (ModelState.IsValid)
             {
                 if (await _profileService.AddNewLanguage(language))
@@ -165,6 +171,9 @@ namespace Talent.Services.Profile.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
         public async Task<ActionResult> UpdateLanguage([FromBody] AddLanguageViewModel language)
         {
+            //Your code here;
+            // throw new NotImplementedException();
+
             if (ModelState.IsValid)
             {
                 if (await _profileService.UpdateLanguage(language))
@@ -179,6 +188,8 @@ namespace Talent.Services.Profile.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
         public async Task<ActionResult> DeleteLanguage([FromBody]string id)
         {
+            //Your code here;
+            // throw new NotImplementedException();
             if (ModelState.IsValid)
             {
                 if (await _profileService.DeleteLanguage(id))
@@ -193,7 +204,9 @@ namespace Talent.Services.Profile.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
         public async Task<IActionResult> GetSkills(String id = "")
         {
-            
+            //Your code here;
+            // throw new NotImplementedException();
+
             String talentId = String.IsNullOrWhiteSpace(id) ? _userAppContext.CurrentUserId : id;
             var languages = await _profileService.GetSkills(talentId);
 
@@ -202,7 +215,7 @@ namespace Talent.Services.Profile.Controllers
 
         [HttpPost("addSkill")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
-        public async Task<ActionResult> AddSkill([FromBody] AddSkillViewModel skill)
+        public async Task<ActionResult> AddSkill([FromBody]AddSkillViewModel skill)
         {
             //Your code here;
             // throw new NotImplementedException();
@@ -214,13 +227,13 @@ namespace Talent.Services.Profile.Controllers
                     return Json(new { Success = true });
                 }
             }
-
+           
             return Json(new { Success = false });
         }
 
         [HttpPost("updateSkill")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
-        public async Task<IActionResult> UpdateSkill([FromBody] AddSkillViewModel skill)
+        public async Task<IActionResult> UpdateSkill([FromBody]AddSkillViewModel skill)
         {
             //Your code here;
             //throw new NotImplementedException();
@@ -253,7 +266,7 @@ namespace Talent.Services.Profile.Controllers
 
         [HttpPost("addExperience")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
-        public async Task<ActionResult> AddExperience([FromBody]ExperienceViewModel experience)
+        public async Task<ActionResult> AddExperience([FromBody] ExperienceViewModel experience)
         {
             //Your code here;
             // throw new NotImplementedException();
@@ -314,8 +327,6 @@ namespace Talent.Services.Profile.Controllers
             return Json(new { Success = true, data = languages });
         }
 
-
-
         [HttpGet("getCertification")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
         public async Task<IActionResult> getCertification()
@@ -358,6 +369,7 @@ namespace Talent.Services.Profile.Controllers
         }
 
         [HttpPost("updateProfilePhoto")]
+        
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "talent")]
         public async Task<ActionResult> UpdateProfilePhoto([FromForm(Name = "body")] IFormFile formData)
         {
@@ -367,7 +379,7 @@ namespace Talent.Services.Profile.Controllers
             {
                 if (await _profileService.UpdateTalentPhoto(talentId, formData))
                 {
-                    return Json(new { Success = true });
+                    return Json(new { Success = true});
                 }
             }
             return Json(new { Success = false });
@@ -559,9 +571,11 @@ namespace Talent.Services.Profile.Controllers
             return Json(new { Success = false });
         }
 
+        
+
         [HttpGet("getTalent")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "recruiter, employer")]
-        public async Task<IActionResult> GetTalentSnapshots(FeedIncrementModel feed)
+        public async Task<IActionResult> GetTalentSnapshots([FromQuery] FeedIncrementModel feed)
         {
             try
             {

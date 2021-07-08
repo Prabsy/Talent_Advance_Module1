@@ -53,9 +53,20 @@ export class IndividualDetailSection extends Component {
     saveContact() {
         console.log(this.props.componentId)
         console.log(this.state.newContact)
-        const data = Object.assign({}, this.state.newContact)
-        this.props.controlFunc(this.props.componentId, data)
-        this.closeEdit()
+        const firstName = this.state.newContact.firstName
+        const lastName = this.state.newContact.lastName
+        const email = this.state.newContact.email
+        const phone = this.state.newContact.phone
+        const re = /^[0-9\b]+$/
+
+        var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i)
+        if (firstName === "" || re.test(firstName) || lastName === "" ||re.test(lastName) || email === "" || phone === "" || !pattern.test(email) || !re.test(phone)) {
+            TalentUtil.notification.show("Please fill all the blanks", "error", null, null)
+        } else {
+            const data = Object.assign({}, this.state.newContact)
+            this.props.controlFunc(this.props.componentId, data)
+            this.closeEdit()
+        }
     }
 
     render() {
@@ -248,7 +259,7 @@ export class CompanyDetailSection extends Component {
         let companyName = this.props.details ? this.props.details.name : ""
         let email = this.props.details ? this.props.details.email : ""
         let phone = this.props.details ? this.props.details.phone : ""
-        let location = {city:'',country:''}
+        let location = { city: '', country: '' }
         if (this.props.details && this.props.details.location) {
             location = this.props.details.location
         }

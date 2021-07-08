@@ -105,7 +105,8 @@ export default class VisaStatus extends React.Component {
         console.log(Expired)
 
         if (moment(date).isAfter(Expired)) {
-            TalentUtil.notification.show("Date InValid")
+
+            TalentUtil.notification.show("Date InValid","error",null,null)
             this.setState({
                 isVisaExpired: false,
                 hideSave: false
@@ -141,7 +142,7 @@ export default class VisaStatus extends React.Component {
                             onChange={this.handleChange}
                             style={{ height: "43px" }}
                         >
-                            {/* <option value="" disabled defaultValue>{`${visaStatus} ${VisaExpiryDate}`}</option> */}
+                             {/*<option value="" disabled defaultValue>{`${visaStatus} ${VisaExpiryDate}`}</option> */}
                             <option value="Citizen">Citizen</option>
                             <option value="Permanent Resident">Permanent Resident</option>
                             <option value="Work Visa">Work Visa</option>

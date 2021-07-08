@@ -17,6 +17,6 @@ namespace Talent.Services.Profile.Models.Profile
         public string Id { get; set; }
         public string Name { get; set; }
         public string Level { get; set; }
-        public object CurrentUserId { get; set; }
+        public string CurrentUserId { get; set; }
     }
 }

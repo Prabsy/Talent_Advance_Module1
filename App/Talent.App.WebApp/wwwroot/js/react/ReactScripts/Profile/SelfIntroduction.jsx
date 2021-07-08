@@ -7,15 +7,8 @@ export default class SelfIntroduction extends React.Component {
         super(props);
     
     };
-
-    
-
-
-
     render() {
-        return (
-        <p>Self Intro</p>)
-
+       
     }
 }
 

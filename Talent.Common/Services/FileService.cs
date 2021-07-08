@@ -19,15 +19,15 @@ namespace Talent.Common.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public FileService(IHostingEnvironment environment, 
-            IAwsService awsService,IHttpContextAccessor httpContextAccessor)
+            IAwsService awsService, IHttpContextAccessor httpContextAccessor)
         {
             _environment = environment;
-            _tempFolder = "images\\";
+            _tempFolder = "Images";
             _awsService = awsService;
             _httpContextAccessor = httpContextAccessor;
-
         }
 
+        
         public async Task<string> SaveFile(IFormFile file, FileType type)
         {
             try
@@ -40,7 +40,7 @@ namespace Talent.Common.Services
 
                 //if (string.IsNullOrWhiteSpace(_environment.WebRootPath))
                 //{
-
+                    
                 //    _environment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
                 //}
 
@@ -58,25 +58,25 @@ namespace Talent.Common.Services
                     {
                         await file.CopyToAsync(fileStream);
 
-                        // await _awsService.PutFileToS3(path, fileStream, "[Bucket name]");
+                       // await _awsService.PutFileToS3(path, fileStream, "[Bucket name]");
                     }
                 }
                 return UniqueFileName;
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 return "";
             }
-
+            
         }
 
-        //Photoupload by Kushan
+        
         public async Task<string> GetFileURL(string filename, FileType type)
         {
             string path = "";
             try
             {
-
+                
                 //get the url of web site
                 string myHostUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}";
 
@@ -86,14 +86,14 @@ namespace Talent.Common.Services
                 return path;
             }
 
-            catch
+            catch 
             {
                 return path;
             }
         }
 
 
-        //Photoupload by Kushan
+        
         public async Task<bool> DeleteFile(string filename, FileType type)
         {
             var isdeleted = false;
@@ -117,7 +117,7 @@ namespace Talent.Common.Services
 
                 return isdeleted;
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 return isdeleted;
             }

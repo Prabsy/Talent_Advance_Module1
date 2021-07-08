@@ -33,6 +33,8 @@ export default class ForgotPassword extends React.Component {
 
         $.ajax({
             url: 'http://localhost:60998/authentication/authentication/forgetpassword',
+            //url: 'https://talentidentityic.azurewebsites.net/authentication/authentication/forgetpassword',
+
             type: 'POST',
             data: JSON.stringify(forgotPasswordModel),
             contentType: 'application/json',

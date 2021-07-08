@@ -10,17 +10,27 @@ using System.Threading.Tasks;
 
 namespace Talent.Common.Services
 {
-    public class Repository<T> : IRepository<T> where T : IMongoCommon, new()
+    //Repository is a generic class implement IRepository<T> which has a constrain that accept IRepository which implements 
+    //IMongoCommon and can be instantiate(with new())
+    public class Repository<T> : IRepository<T> where T : IMongoCommon,new()
     {
         private readonly IMongoDatabase _database;
         private IMongoCollection<T> _collection => _database.GetCollection<T>(typeof(T).Name);
+
+        //private IMongoCollection<T> _collection
+        //{
+        //    get { return _database.GetCollection<T>(typeof(T).Name); }
+        //}
 
         public Repository(IMongoDatabase database)
         {
             _database = database;
         }
 
-        public IQueryable<T> Collection => _collection.AsQueryable();
+         public IQueryable<T> Collection => _collection.AsQueryable();
+
+        //public IQueryable<T> Collection
+        //{ get { return _collection.AsQueryable(); } }
 
         public async Task Add(T entity)
         {
@@ -61,6 +71,26 @@ namespace Talent.Common.Services
             }
 
         }
+        /// <summary>
+        /// kushan
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<T>> GetAll()
+        {
+            for (int i = 0; i < 5; ++i)
+            {
+                try
+                {
+                    return _collection.AsQueryable();
+
+                }
+                catch (MongoException e)
+                {
+                    await Task.Delay(1000);
+                }
+            }
+            throw new ApplicationException("Hit retry limit while trying to query MongoDB");
+        }
 
         public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>> predicate)
         {
@@ -69,6 +99,7 @@ namespace Talent.Common.Services
                 try
                 {
                     return _collection.AsQueryable().Where(predicate).AsEnumerable();
+                   
                 }
                 catch (MongoException e)
                 {
@@ -128,11 +159,6 @@ namespace Talent.Common.Services
                 }
             }
             throw new ApplicationException("Hit retry limit while trying to query MongoDB");
-        }
-
-        public Task<IEnumerable<T>> GetAll()
-        {
-            throw new NotImplementedException();
         }
     }
 

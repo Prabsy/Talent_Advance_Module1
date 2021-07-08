@@ -47,17 +47,16 @@ export class BodyWrapper extends React.Component {
         return (
             <div>
                 <AuthenticatingBanner reload={reload} authenticationCallback={this.loggedInUserType} />
-                <LoggedInNavigation role={this.state.userRole} />                
+                <LoggedInNavigation role={this.state.userRole} />
                 {isLoading ?
                     <div style={{ 'height': '30rem' }}>
                         <div className="ui active loader">
                         </div>
                     </div>
                     : err === 0 ?
-                        <div style={{minHeight:"250px"}}>
+                        <div style={{ minHeight: "250px" }}>
                             {children}</div> : errorTemplate
-                        }
-                        
+                }
             </div>
         )
     }

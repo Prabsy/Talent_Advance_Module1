@@ -13,6 +13,6 @@ namespace Talent.Services.Profile.Models.Profile
         public String Responsibilities { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
-        public object CurrentUserId { get;  set; }
+        public string CurrentUserId { get; set; }
     }
 }

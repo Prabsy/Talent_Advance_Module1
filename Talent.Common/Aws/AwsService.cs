@@ -52,22 +52,7 @@ namespace Talent.Common.Aws
             }
             throw new Exception("Can not list object from Amazone S3 Bucket");
         }
-        private async Task<SessionAWSCredentials> GetTemporaryCredentials()
-        {
-            AmazonSecurityTokenServiceClient stsClient =
-    new AmazonSecurityTokenServiceClient(_options.AwsAccessKey,
-        _options.AwsSerectKey);
-            GetSessionTokenRequest getSessionTokenRequest = new GetSessionTokenRequest { DurationSeconds = 7200 };
-            GetSessionTokenResponse sessionTokenResponse = await
-                stsClient.GetSessionTokenAsync(getSessionTokenRequest);
-            Credentials credentials = sessionTokenResponse.Credentials;
-
-            SessionAWSCredentials sessionCredential =
-                new SessionAWSCredentials(credentials.AccessKeyId,
-                    credentials.SecretAccessKey,
-                    credentials.SessionToken);
-            return sessionCredential;
-        }
+        
 
         public async Task<S3Object> GetObjectFromName(string name, string bucketName)
         {
@@ -147,11 +132,33 @@ namespace Talent.Common.Aws
             return urlString;
         }
         
+
+
+
+        //#############################
         public async Task<string> GetStaticUrl(string name, string bucketName)
         {
             return string.Format("http://{0}.s3.amazonaws.com/{1}", bucketName, name);
         }
 
+        private async Task<SessionAWSCredentials> GetTemporaryCredentials()
+        {
+            AmazonSecurityTokenServiceClient stsClient =
+    new AmazonSecurityTokenServiceClient(_options.AwsAccessKey,
+        _options.AwsSerectKey);
+            GetSessionTokenRequest getSessionTokenRequest = new GetSessionTokenRequest { DurationSeconds = 7200 };
+            GetSessionTokenResponse sessionTokenResponse = await
+                stsClient.GetSessionTokenAsync(getSessionTokenRequest);
+            Credentials credentials = sessionTokenResponse.Credentials;
+
+            SessionAWSCredentials sessionCredential =
+                new SessionAWSCredentials(credentials.AccessKeyId,
+                    credentials.SecretAccessKey,
+                    credentials.SessionToken);
+            return sessionCredential;
+        }
+
+        //put file to S3 bucket
         public async Task<bool> PutFileToS3(string name, Stream stream, string bucketName, bool isPublic=false)
         {
             PutObjectRequest s3PutRequest = new PutObjectRequest();

@@ -13,7 +13,7 @@ export default class Skill extends React.Component {
                 name: "",
                 level: "",
                 id: ""
-            },
+            },           
             skills: []
         }
         this.openEdit = this.openEdit.bind(this)
@@ -50,7 +50,7 @@ export default class Skill extends React.Component {
     loadData() {
         var cookies = Cookies.get('talentAuthToken');
         $.ajax({
-            url: 'http://localhost:60290/profile/profile/getSkill',
+            url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/getSkill',
             headers: {
                 'Authorization': 'Bearer ' + cookies,
                 'Content-Type': 'application/json'
@@ -76,7 +76,7 @@ export default class Skill extends React.Component {
             skill: data
 
         })
-
+        
     }
 
     onEdit(rowkey, name, level) {
@@ -101,7 +101,7 @@ export default class Skill extends React.Component {
         var cookies = Cookies.get('talentAuthToken');
         if (this.state.skill.name !== "" && this.state.skill.level !== "") {
             $.ajax({
-                url: 'http://localhost:60290/profile/profile/addSkill',
+                url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/addSkill',
                 headers: {
                     'Authorization': 'Bearer ' + cookies,
                     'Content-Type': 'application/json'
@@ -122,7 +122,7 @@ export default class Skill extends React.Component {
 
                 }
             })
-
+            
         } else {
             TalentUtil.notification.show("Please Fill all the Blanks", "error", null, null)
         }
@@ -134,7 +134,7 @@ export default class Skill extends React.Component {
         var cookies = Cookies.get('talentAuthToken');
         if (this.state.skill.name !== "" && this.state.skill.level !== "") {
             $.ajax({
-                url: 'http://localhost:60290/profile/profile/updateSkill',
+                url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/updateSkill',
                 headers: {
                     'Authorization': 'Bearer ' + cookies,
                     'Content-Type': 'application/json'
@@ -167,7 +167,7 @@ export default class Skill extends React.Component {
         var cookies = Cookies.get('talentAuthToken');
         $.ajax({
 
-            url: 'http://localhost:60290/profile/profile/DeleteSkill',
+            url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/DeleteSkill',
 
             headers: {
                 'Authorization': 'Bearer ' + cookies,
@@ -240,8 +240,8 @@ export default class Skill extends React.Component {
                                                             <input type="text" defaultValue={skill.name} /* placeholder="Add skill" */ name="name" onChange={this.handleChange} >
                                                             </input>
                                                         ) : (
-                                                                skill.name
-                                                            )
+                                                            skill.name
+                                                        )
                                                     }
                                                 </td>
                                                 <td>
@@ -254,8 +254,8 @@ export default class Skill extends React.Component {
                                                                 <option value="Expert">Expert</option>
                                                             </select>
                                                         ) : (
-                                                                skill.level
-                                                            )
+                                                            skill.level
+                                                        )
                                                     }
                                                 </td>
                                                 <td>
@@ -266,11 +266,11 @@ export default class Skill extends React.Component {
                                                                 <input type="button" class="ui red basic button" value="Cancel" onClick={this.onClose}></input>
                                                             </span>
                                                         ) : (
-                                                                <div class="right aligned">
-                                                                    <span class="button" onClick={() => this.onEdit(skill.id, skill.name, skill.level)}><i class="outline write icon"></i></span>
-                                                                    <span class="button" onClick={() => this.deleteSkill(skill.id)}><i class="remove icon"></i></span>
-                                                                </div>
-                                                            )
+                                                            <div class="right aligned">
+                                                                <span class="button" onClick={() => this.onEdit(skill.id, skill.name, skill.level)}><i class="outline write icon"></i></span>
+                                                                <span class="button" onClick={() => this.deleteSkill(skill.id)}><i class="remove icon"></i></span>
+                                                            </div>
+                                                        )
                                                     }
                                                 </td>
                                             </tr>

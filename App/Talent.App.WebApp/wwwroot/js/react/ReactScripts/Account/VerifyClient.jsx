@@ -47,6 +47,8 @@ export default class VerifyClient extends React.Component {
             recruiterEmail, clientEmail, resetPasswordToken
         }
         let url = `http://localhost:60998/authentication/authentication/verifyClientToken?recruiterEmail=${recruiterEmail}&clientEmail=${clientEmail}&resetPasswordToken=${resetPasswordToken}`;
+        //let url = `https://talentidentityic.azurewebsites.net/authentication/authentication/verifyClientToken?recruiterEmail=${recruiterEmail}&clientEmail=${clientEmail}&resetPasswordToken=${resetPasswordToken}`;
+
         $.ajax({
             url: url,
             type: 'POST',

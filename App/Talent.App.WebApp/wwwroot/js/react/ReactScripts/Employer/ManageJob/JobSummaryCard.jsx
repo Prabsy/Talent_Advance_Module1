@@ -12,7 +12,9 @@ export class JobSummaryCard extends React.Component {
     selectJob(id) {
         var cookies = Cookies.get('talentAuthToken');
         $.ajax({
-            url: 'http://localhost:51689/listing/listing/closeJob',
+           url: 'http://localhost:51689/listing/listing/closeJob',
+            //url: 'https://talenttalentic.azurewebsites.net/listing/listing/closeJob',
+            //https://talenttalentic.azurewebsites.net
             headers: {
                 'Authorization': 'Bearer ' + cookies,
                 'Content-Type': 'application/json'

@@ -52,7 +52,9 @@ export default class EmployeeProfile extends React.Component {
     loadData() {
         var cookies = Cookies.get('talentAuthToken');
         $.ajax({
-            url: 'http://localhost:60290/profile/profile/getEmployerProfile',
+            url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/getEmployerProfile',
+
+
             headers: {
                 'Authorization': 'Bearer ' + cookies,
                 'Content-Type': 'application/json'
@@ -71,7 +73,7 @@ export default class EmployeeProfile extends React.Component {
             error: function (res) {
                 console.log(res.status)
             }
-        }) 
+        })
         this.init()
     }
 
@@ -154,7 +156,8 @@ export default class EmployeeProfile extends React.Component {
 
         var cookies = Cookies.get('talentAuthToken');
         $.ajax({
-            url: 'http://localhost:60290/profile/profile/saveEmployerProfile',
+            url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/saveEmployerProfile',
+
             headers: {
                 'Authorization': 'Bearer ' + cookies,
                 'Content-Type': 'application/json'
@@ -207,7 +210,7 @@ export default class EmployeeProfile extends React.Component {
                                                 componentId='companyContact'
                                             />
                                         </FormItemWrapper>
-                                     
+
                                         <FormItemWrapper
                                             title='Display profile'
                                             tooltip='Toggle company profile visibility in the employer feed.'

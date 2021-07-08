@@ -11,8 +11,6 @@ export default class Certificate extends React.Component {
     };
 
     render() {
-        return (
-        <p>Certi</p>)
 
     }
 }

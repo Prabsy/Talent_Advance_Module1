@@ -13,7 +13,7 @@ export default class Language extends React.Component {
                 level: "",
                 id: ""
             },
-
+            
             languages: []
         }
         this.openEdit = this.openEdit.bind(this)
@@ -50,7 +50,7 @@ export default class Language extends React.Component {
     loadData() {
         var cookies = Cookies.get('talentAuthToken');
         $.ajax({
-            url: 'http://localhost:60290/profile/profile/getLanguage',
+            url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/getLanguage',
             headers: {
                 'Authorization': 'Bearer ' + cookies,
                 'Content-Type': 'application/json'
@@ -110,7 +110,7 @@ export default class Language extends React.Component {
                  if (names[i] !== name) { */
 
             $.ajax({
-                url: 'http://localhost:60290/profile/profile/addLanguage',
+                url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/addLanguage',
                 headers: {
                     'Authorization': 'Bearer ' + cookies,
                     'Content-Type': 'application/json'
@@ -147,7 +147,7 @@ export default class Language extends React.Component {
         var cookies = Cookies.get('talentAuthToken');
         if (this.state.language.name !== "" && this.state.language.level !== "") {
             $.ajax({
-                url: 'http://localhost:60290/profile/profile/updateLanguage',
+                url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/updateLanguage',
                 headers: {
                     'Authorization': 'Bearer ' + cookies,
                     'Content-Type': 'application/json'
@@ -180,7 +180,7 @@ export default class Language extends React.Component {
         var cookies = Cookies.get('talentAuthToken');
         $.ajax({
 
-            url: 'http://localhost:60290/profile/profile/DeleteLanguage',
+            url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/DeleteLanguage',
 
             headers: {
                 'Authorization': 'Bearer ' + cookies,
@@ -255,8 +255,8 @@ export default class Language extends React.Component {
                                                             <input type="text" defaultValue={language.name} /* placeholder="Add Language" */ name="name" onChange={this.handleChange} >
                                                             </input>
                                                         ) : (
-                                                                language.name
-                                                            )
+                                                            language.name
+                                                        )
                                                     }
                                                 </td>
                                                 <td>
@@ -270,8 +270,8 @@ export default class Language extends React.Component {
                                                                 <option value="Native/Bilingual">Native/Bilingual</option>
                                                             </select>
                                                         ) : (
-                                                                language.level
-                                                            )
+                                                            language.level
+                                                        )
                                                     }
                                                 </td>
                                                 <td>
@@ -282,11 +282,11 @@ export default class Language extends React.Component {
                                                                 <input type="button" class="ui red basic button" value="Cancel" onClick={this.onClose}></input>
                                                             </span>
                                                         ) : (
-                                                                <div class="right aligned">
-                                                                    <span class="button" onClick={() => this.onEdit(language.id, language.name, language.level)}><i class="outline write icon"></i></span>
-                                                                    <span class="button" onClick={() => this.deleteLanguage(language.id)}><i class="remove icon"></i></span>
-                                                                </div>
-                                                            )
+                                                            <div class="right aligned">
+                                                                <span class="button" onClick={() => this.onEdit(language.id, language.name, language.level)}><i class="outline write icon"></i></span>
+                                                                <span class="button" onClick={() => this.deleteLanguage(language.id)}><i class="remove icon"></i></span>
+                                                            </div>
+                                                        )
                                                     }
                                                 </td>
                                             </tr>

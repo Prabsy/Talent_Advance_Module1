@@ -23,6 +23,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Talent.Common.Aws;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace Talent.Services.Profile
 {
@@ -79,6 +81,7 @@ namespace Talent.Services.Profile
             services.AddScoped<IUserAppContext, UserAppContext>();
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IFileService, FileService>();
+           // services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,6 +93,15 @@ namespace Talent.Services.Profile
             }
             app.UseCors("AllowWebAppAccess");
             app.UseMvc();
+
+            //read content of images folder via url ex:localhost:60290/Images/abc.jpg
+            //requierd for photoupload component
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+            Path.Combine(env.ContentRootPath, "Images")),
+                RequestPath = "/Images"
+            });
         }
     }
 }

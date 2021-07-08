@@ -9,34 +9,34 @@ export default class PhotoUpload extends Component {
         const details = props.details
 
         this.state = {
-            file: null,
-            imageSrc: "",
-            id: details.id
+            file:null,
+            imageSrc:"" ,
+            id:details.id
         }
         this.handleChange = this.handleChange.bind(this)
         this.save = this.save.bind(this)
     };
 
-    save() {
-        let file = this.state.file
-        var formData = new FormData();
+    save(){
+        let file=this.state.file
+        var formData=new FormData();
         formData.append('body', this.state.file);
-        // file.append('myImage',this.state.file);
+       // file.append('myImage',this.state.file);
         // console.log(file)
         // console.log(form)
         var cookies = Cookies.get('talentAuthToken');
         $.ajax({
-
-            url: 'http://localhost:60290/profile/profile/updateProfilePhoto',
-
+            
+            url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/updateProfilePhoto',
+            
             headers: {
                 'Authorization': 'Bearer ' + cookies,
                 // 'content-type': 'multipart/form-data',
             },
             data: formData,
             cache: false,
-            processData: false,
-            contentType: false,
+           processData: false,
+           contentType: false,
             type: "POST",
             //data: JSON.stringify(file),
             success: function (res) {
@@ -55,35 +55,37 @@ export default class PhotoUpload extends Component {
 
     }
 
-    handleChange(event) {
-
+    handleChange(event){
+        
         if (event.target.files && event.target.files[0]) {
-            let file = event.target.files[0];
+            let file=event.target.files[0];
             console.log("image source")
             console.log(event.target.result)
             this.setState({
                 imageSrc: event.target.result,
-                file: file
+                file:file
             });
             let reader = new FileReader();
             reader.onload = (e) => {
-                this.setState({
-                    imageSrc: e.target.result,
-
-                });
+              this.setState({
+                  imageSrc: e.target.result,
+                  
+            });
             };
-            reader.readAsDataURL(event.target.files[0]);
+           reader.readAsDataURL(event.target.files[0]);
+            
+          }
 
-        }
-
-
+        
     }
+    
 
+    render() 
+    {
+        console.log("URL" + this.props.details.profilePhotoUrl)
 
-    render() {
-        // console.log(this.props.details.profilePhotoUrl)
         // console.log(this.state.imageSrc)
-        //  const image=require.context(this.props.details.profilePhotoUrl,true);
+      //  const image=require.context(this.props.details.profilePhotoUrl,true);
         let showProfileImg;
         if (this.state.imageSrc != "") {
             showProfileImg =
@@ -92,39 +94,39 @@ export default class PhotoUpload extends Component {
                         style={{ height: 112, width: 112 }}
                         className="ui small circular image uploader"
                         src={this.state.imageSrc}
-
+                        
                         alt="Image Not Found"
                         onClick={this.handleChange}
                     />
                     {/* <div className="ui teal button" onClick={this.save}>
                         <i className="small upload icon"></i>Upload
                     </div> */}
-                    <button type="button" className="ui teal button" onClick={this.save}>Upload</button>
+                    <button type="button" className="ui teal button" onClick={this.save}>Upload</button>  
                 </div>;
         } else if (this.props.details.profilePhotoUrl != "" && this.props.details.profilePhotoUrl != undefined) {
             showProfileImg =
                 <img
                     style={{ height: 112, width: 112 }}
-                    className="ui small circular image uploader"
-                    src={this.props.details.profilePhotoUrl}
-                    alt=""
+                    className="ui small circular image uploader"                 
+                    src={this.props.details.profilePhotoUrl}          
+                    alt="lojjhhhfhfcfg"
                     onClick={this.handleChange}
                 />;
         }
         else {
-            showProfileImg = <i className="camera retro" onClick={this.handleChange}></i>;
+            showProfileImg = <i className="huge circular camera retro link icon uploader" onClick={this.handleChange}></i>;
         }
         return (
-            <section>
-                <div class="image-upload">
-                    <label For="file-input" className="profile-photo">
-                        {showProfileImg}
-                    </label>
-                    <input id="file-input" type="file" style={{ display: 'none' }} onChange={this.handleChange} accept="image/*" />
-                </div>
-            </section>
+                    <section>
+                        <div class="image-upload">
+                            <label For="file-input" className="profile-photo">
+                                {showProfileImg}
+                            </label> 
+                            <input id="file-input" type="file" style={{ display: 'none' }} onChange={this.handleChange} accept="image/*"/>
+                        </div>
+                    </section>
         )
     }
-
-
+        
+    
 }

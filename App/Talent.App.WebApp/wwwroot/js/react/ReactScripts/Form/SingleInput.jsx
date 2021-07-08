@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 
 export const SingleInput = (props) =>
     <div className={`field ${props.isError == true ? 'error' : ''} `}>
+        <label>{props.label}</label>
         <input
             type={props.inputType}
             placeholder={props.placeholder}
             name={props.name}
             value={props.content}
+            defaultValue={props.defaultValue}
             onChange={props.controlFunc} />
         {props.isError ? <div className="ui basic red pointing prompt label transition visible">{props.errorMessage}</div> : null}
     </div>
@@ -43,6 +45,7 @@ export class ChildSingleInput extends React.Component {
                     type={this.props.inputType}
                     name={this.props.name}
                     value={this.props.value}
+                    defaultValue={this.props.defaultValue}
                     placeholder={this.props.placeholder}
                     maxLength={this.props.maxLength}
                     onChange={this.props.controlFunc}
@@ -63,6 +66,7 @@ ChildSingleInput.propTypes = {
         PropTypes.number
     ]).isRequired,
     placeholder: PropTypes.string,
+    defaultValue:PropTypes.string,
     controlFunc: PropTypes.func.isRequired,
     //isError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string.isRequired

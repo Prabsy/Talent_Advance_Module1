@@ -26,7 +26,7 @@ export default class Description extends React.Component {
 
     handleChange(event) {
         const data = Object.assign({}, this.state.newContact)
-        console.log("viren", event.target.value);
+        console.log("ram", event.target.value);
         data[event.target.name] = event.target.value
         this.setState({
             newContact: data
@@ -37,7 +37,8 @@ export default class Description extends React.Component {
     saveContact() {
         const D = this.state.newContact.description.length;
         const S = this.state.newContact.summary.length;
-        
+        console.log("S", S)
+        console.log("D:", D)
         if (D < 150 || D > 600 || S <= 0 || S > 150) {
             TalentUtil.notification.show("Please Write your Characters Between Given Range", "error", null, null)
         } else {

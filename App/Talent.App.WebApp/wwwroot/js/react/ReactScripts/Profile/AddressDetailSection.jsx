@@ -76,6 +76,7 @@ export class AddressDetailSection extends Component {
 
         return (
             <div className='ui sixteen wide column'>
+               <div className="numberinputfield">
                 <ChildSingleInput
                     inputType="text"
                     label="Number"
@@ -86,6 +87,8 @@ export class AddressDetailSection extends Component {
                     // placeholder="Enter your first name"
                     // errorMessage="Please enter a valid first name"
                 />
+                </div>
+                <div className="streetinputfield">
                 <ChildSingleInput
                     inputType="text"
                     label="Street"
@@ -96,7 +99,8 @@ export class AddressDetailSection extends Component {
                    // placeholder="Enter your last name"
                     // errorMessage="Please enter a valid last name"
                 />
-
+                </div>
+                <div className="suburbinputfield">
                 <ChildSingleInput
                     inputType="text"
                     label="Suburb"
@@ -107,6 +111,7 @@ export class AddressDetailSection extends Component {
                     // placeholder="Enter an email"
                     // errorMessage="Please enter a valid email"
                 />
+                </div>
                 
                 {/* Location: */}
                 {/* <Address location={location} controlFunc={this.handleChange}/> */}

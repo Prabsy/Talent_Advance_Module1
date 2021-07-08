@@ -24,7 +24,7 @@ export default class Experience extends React.Component {
         this.deleteExperience = this.deleteExperience.bind(this)
         this.loadData = this.loadData.bind(this)
         this.updateWithoutSave = this.updateWithoutSave.bind(this)
-        /*  this.check = this.check.bind(this) */
+       /*  this.check = this.check.bind(this) */
         this.setDate = this.setDate.bind(this)
     }
 
@@ -52,7 +52,7 @@ export default class Experience extends React.Component {
         // console.log("loadData called!!");
         var cookies = Cookies.get('talentAuthToken');
         $.ajax({
-            url: 'http://localhost:60290/profile/profile/getExperience',
+            url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/getExperience',
 
             headers: {
                 'Authorization': 'Bearer ' + cookies,
@@ -77,7 +77,8 @@ export default class Experience extends React.Component {
 
     handleChange(event) {
         const data = Object.assign({}, this.state.experience)
-        
+        console.log(event.target.name)
+        console.log(event.target.value)
         data[event.target.name] = event.target.value
         this.setState({
             experience: data
@@ -124,7 +125,7 @@ export default class Experience extends React.Component {
                 console.log(End)
             } else {
                 $.ajax({
-                    url: 'http://localhost:60290/profile/profile/addExperience',
+                    url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/addExperience',
                     headers: {
                         'Authorization': 'Bearer ' + cookies,
                         'Content-Type': 'application/json'
@@ -156,36 +157,36 @@ export default class Experience extends React.Component {
         const Start = `Start : ${(this.state.experience.start).slice(0, 10)}`
         const End = `End : ${(this.state.experience.end).slice(0, 10)}`
         if (this.state.experience.company !== "" && this.state.experience.position !== "" && this.state.experience.responsibilities !== "" && this.state.experience.start !== "" && this.state.experience.end !== "") {
-            if (moment(Start).isAfter(End)) {
-                TalentUtil.notification.show("Date Invalid", "error", null, null)
-                console.log(Start)
-                console.log(End)
-            } else {
-                $.ajax({
-                    url: 'http://localhost:60290/profile/profile/updateExperience',
-                    headers: {
-                        'Authorization': 'Bearer ' + cookies,
-                        'Content-Type': 'application/json'
-                    },
-                    type: "POST",
-                    data: JSON.stringify(this.state.experience),
-                    success: function (res) {
-                        this.loadData()
-                        console.log(res)
-                        if (res.success == true) {
-                            TalentUtil.notification.show("Profile updated sucessfully", "success", null, null)
-                        } else {
-                            TalentUtil.notification.show("Profile did not update successfully", "error", null, null)
-                        }
-                    }.bind(this),
-                    error: function (res, a, b) {
-                    }
-                })
-                this.onClose();
-            }
+        if (moment(Start).isAfter(End)) {
+            TalentUtil.notification.show("Date Invalid", "error", null, null)
+            console.log(Start)
+            console.log(End)
         } else {
-            TalentUtil.notification.show("Please Fill all the Blanks", "error", null, null)
+            $.ajax({
+                url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/updateExperience',
+                headers: {
+                    'Authorization': 'Bearer ' + cookies,
+                    'Content-Type': 'application/json'
+                },
+                type: "POST",
+                data: JSON.stringify(this.state.experience),
+                success: function (res) {
+                    this.loadData()
+                    console.log(res)
+                    if (res.success == true) {
+                        TalentUtil.notification.show("Profile updated sucessfully", "success", null, null)
+                    } else {
+                        TalentUtil.notification.show("Profile did not update successfully", "error", null, null)
+                    }
+                }.bind(this),
+                error: function (res, a, b) {
+                }
+            })
+            this.onClose();
         }
+    }else{
+        TalentUtil.notification.show("Please Fill all the Blanks", "error", null, null)
+    }
     }
 
 
@@ -193,7 +194,7 @@ export default class Experience extends React.Component {
         console.log(id)
         var cookies = Cookies.get('talentAuthToken');
         $.ajax({
-            url: 'http://localhost:60290/profile/profile/deleteExperience',
+            url: 'https://talentservicesprofile20210708015028.azurewebsites.net/profile/profile/deleteExperience',
             headers: {
                 'Authorization': 'Bearer ' + cookies,
                 'Content-Type': 'application/json'

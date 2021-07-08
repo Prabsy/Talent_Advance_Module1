@@ -20,17 +20,18 @@ namespace Talent.Services.Profile.Domain.Services
         private readonly IUserAppContext _userAppContext;
         IRepository<UserLanguage> _userLanguageRepository;
         IRepository<UserSkill> _userSkillRepository;
-         IRepository<UserExperience> _userExperienceRepository;
+        IRepository<UserExperience> _userExperienceRepository;
         IRepository<User> _userRepository;
         IRepository<Employer> _employerRepository;
         IRepository<Job> _jobRepository;
         IRepository<Recruiter> _recruiterRepository;
         IFileService _fileService;
 
+
         public ProfileService(IUserAppContext userAppContext,
                               IRepository<UserLanguage> userLanguageRepository,
-                                IRepository<UserSkill> userSkillRepository,
-                                IRepository<UserExperience> userExperienceRepository,
+                              IRepository<UserSkill> userSkillRepository,
+                              IRepository<UserExperience> userExperienceRepository,
                               IRepository<User> userRepository,
                               IRepository<Employer> employerRepository,
                               IRepository<Job> jobRepository,
@@ -48,11 +49,16 @@ namespace Talent.Services.Profile.Domain.Services
             _fileService = fileService;
         }
 
+
+        #region Language component Methods
+
         public async Task<bool> AddNewLanguage(AddLanguageViewModel language)
         {
+            //Your code here;
+            //throw new NotImplementedException();
             try
             {
-                if (language.CurrentUserId != null)
+                if(language.CurrentUserId!=null)
                 {
                     var userLanguage = new UserLanguage();
                     userLanguage.Language = language.Name;
@@ -69,9 +75,11 @@ namespace Talent.Services.Profile.Domain.Services
                 return false;
             }
         }
+
         public async Task<bool> DeleteLanguage(string id)
         {
-        
+            //Your code here;
+            //throw new NotImplementedException();
             try
             {
                 var lanuage = await _userLanguageRepository.GetByIdAsync(id);
@@ -91,7 +99,8 @@ namespace Talent.Services.Profile.Domain.Services
 
         public async Task<bool> UpdateLanguage(AddLanguageViewModel language)
         {
-           
+            //Your code here;
+            //throw new NotImplementedException();
             try
             {
                 var userlanuage = await _userLanguageRepository.GetByIdAsync(language.Id);
@@ -114,9 +123,13 @@ namespace Talent.Services.Profile.Domain.Services
 
         public async Task<IEnumerable<AddLanguageViewModel>> GetLanguages(string id)
         {
+           // throw new NotImplementedException();
             var _userlanguages = await _userLanguageRepository.FindAsync(x => x.UserId == id);
-            var userlanguages = _userlanguages.Where(x => !x.IsDeleted).Select(x => new List<UserLanguage>() { x }).SelectMany(x => x).Distinct();
-                     
+              var userlanguages = _userlanguages.Where(x => !x.IsDeleted).Select(x => new List<UserLanguage>() {x} ).SelectMany(x => x).Distinct();
+
+            //var userlanguages = from language in _userlanguages
+            //                    where !language.IsDeleted
+            //                    select language;
 
             List<AddLanguageViewModel> languages = new List<AddLanguageViewModel>();
 
@@ -127,8 +140,107 @@ namespace Talent.Services.Profile.Domain.Services
 
 
             return languages;
+            
+        }
+
+        #endregion
+
+        #region Skill Component Methods
+
+        public async Task<bool> AddNewSkill(AddSkillViewModel skill)
+        {
+            //Your code here;
+            //throw new NotImplementedException();
+            try
+            {
+                if (skill.CurrentUserId != null)
+                {
+                    var userskill = new UserSkill();
+                    userskill.Skill = skill.Name;
+                    userskill.ExperienceLevel = skill.Level;
+                    userskill.UserId = skill.CurrentUserId;
+                    userskill.IsDeleted = false;
+                    await _userSkillRepository.Add(userskill);
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteSkill(string id)
+        {
+            //Your code here;
+            //throw new NotImplementedException();
+            try
+            {
+                var skill = await _userSkillRepository.GetByIdAsync(id);
+                if (skill != null)
+                {
+                    skill.IsDeleted = true;
+                    await _userSkillRepository.Update(skill);
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateSkill(AddSkillViewModel skill)
+        {
+            //Your code here;
+            //throw new NotImplementedException();
+            try
+            {
+                var userSkill = await _userSkillRepository.GetByIdAsync(skill.Id);
+                if (userSkill != null)
+                {
+                    userSkill.Id = userSkill.Id;
+                    userSkill.UserId = userSkill.UserId;
+                    userSkill.Skill = skill.Name;
+                    userSkill.ExperienceLevel = skill.Level;
+                    await _userSkillRepository.Update(userSkill);
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<IEnumerable<AddSkillViewModel>> GetSkills(string id)
+        {
+            // throw new NotImplementedException();
+            //if target property(specify in Select(List<UserSkill>) is list use SelectMany to flattern)
+            //Distinct used for remove duplicate entities
+            var _userskills = await _userSkillRepository.FindAsync(x => x.UserId == id);
+            var userskills = _userskills.Where(x => !x.IsDeleted)
+                .Select(x => new List<UserSkill>() { x })
+                .SelectMany(x => x).Distinct();
+
+            List<AddSkillViewModel> languages = new List<AddSkillViewModel>();
+
+            foreach (var item in userskills)
+            {
+                languages.Add(ViewModelFromSkill(item));
+            }
+
+
+            return languages;
 
         }
+
+        #endregion
+
+        #region Experience component methods
 
         public async Task<bool> AddNewExperience(ExperienceViewModel experience)
         {
@@ -144,7 +256,7 @@ namespace Talent.Services.Profile.Domain.Services
                     userexperience.Position = experience.Position;
                     userexperience.Start = experience.Start;
                     userexperience.End = experience.End;
-                    userexperience.UserId = (string)experience.CurrentUserId;
+                    userexperience.UserId = experience.CurrentUserId;
                     userexperience.IsDeleted = false;
                     await _userExperienceRepository.Add(userexperience);
                     return true;
@@ -223,17 +335,32 @@ namespace Talent.Services.Profile.Domain.Services
 
         }
 
+        #endregion
+
+
+        /// <summary>
+        /// Get Talent(@kushan)
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public async Task<TalentProfileViewModel> GetTalentProfile(string Id)
         {
             //Your code here;
-            ///throw new NotImplementedException();
+            // throw new NotImplementedException();
+
             var user = await _userRepository.GetByIdAsync(Id);
+
             if (user != null)
             {
                 var videoUrl = string.IsNullOrWhiteSpace(user.VideoName)
                            ? ""
                            : await _fileService.GetFileURL(user.VideoName, FileType.UserVideo);
 
+                var skills = user.Skills.Select(x => ViewModelFromSkill(x)).ToList();
+                var language = user.Languages.Select(x => ViewModelFromLaguage(x)).ToList();
+                var certifications = user.Certifications.Select(x => ViewModelFromCertification(x)).ToList();
+                var experience = user.Experience.Select(x => ViewModelFromExperience(x)).ToList();
+                var education = user.Education.Select(x => ViewModelFromEducation(x)).ToList();
 
                 var result = new TalentProfileViewModel
                 {
@@ -257,12 +384,12 @@ namespace Talent.Services.Profile.Domain.Services
                     ProfilePhotoUrl = user.ProfilePhotoUrl,
                     VideoName = user.VideoName,
                     VideoUrl = videoUrl,
+                    Languages = language,
+                    Certifications = certifications,
+                    Experience = experience,
+                    Education = education,
+                    Skills = skills,
                     JobSeekingStatus = user.JobSeekingStatus,
-                    Languages = user.Languages.Select(x => ViewModelFromLaguage(x)).ToList(),
-                    Skills = user.Skills.Select(x => ViewModelFromSkill(x)).ToList(),
-                    Education = user.Education.Select(x => ViewModelFromEducation(x)).ToList(),
-                    Certifications = user.Certifications.Select(x => ViewModelFromCertification(x)).ToList(),
-                    Experience = user.Experience.Select(x => ViewModelFromExperience(x)).ToList(),
                 };
 
                 return result;
@@ -274,7 +401,7 @@ namespace Talent.Services.Profile.Domain.Services
         public async Task<bool> UpdateTalentProfile(TalentProfileViewModel model, string updaterId)
         {
             //Your code here;
-            //throw new NotImplementedException();
+            // throw new NotImplementedException();
             try
             {
                 if (model.Id != null)
@@ -305,6 +432,7 @@ namespace Talent.Services.Profile.Domain.Services
             }
         }
 
+        
         public async Task<EmployerProfileViewModel> GetEmployerProfile(string Id, string role)
         {
 
@@ -425,6 +553,7 @@ namespace Talent.Services.Profile.Domain.Services
             }
         }
 
+      
         public async Task<bool> UpdateEmployerPhoto(string employerId, IFormFile file)
         {
             var fileExtension = Path.GetExtension(file.FileName);
@@ -470,6 +599,7 @@ namespace Talent.Services.Profile.Domain.Services
             throw new NotImplementedException();
         }
 
+        
         public async Task<bool> UpdateTalentPhoto(string talentId, IFormFile file)
         {
             try
@@ -501,7 +631,7 @@ namespace Talent.Services.Profile.Domain.Services
                     }
 
                     string photourl = await _fileService.GetFileURL(newFileName, FileType.ProfilePhoto);
-                    if (!string.IsNullOrWhiteSpace(photourl))
+                    if(!string.IsNullOrWhiteSpace(photourl))
                     {
                         profile.ProfilePhoto = newFileName;
                         profile.ProfilePhotoUrl = photourl;
@@ -513,7 +643,7 @@ namespace Talent.Services.Profile.Domain.Services
 
                 return false;
             }
-            catch (MongoException e)
+            catch(MongoException e)
             {
                 return false;
             }
@@ -547,8 +677,65 @@ namespace Talent.Services.Profile.Domain.Services
 
         public async Task<IEnumerable<TalentSnapshotViewModel>> GetTalentSnapshotList(string employerOrJobId, bool forJob, int position, int increment)
         {
-            //Your code here;
-            throw new NotImplementedException();
+            var users = (await _userRepository.Get(x => x.IsDeleted == false)).Skip(position).Take(increment).ToList();
+           // var talentlist = await _userRepository.Get(x => x.IsDeleted == false);
+           // var users = talentlist.Skip(position).Take(increment); 
+
+            List<TalentSnapshotViewModel> talents=null;
+
+            if (users.Count()!=0)
+            {
+                talents = new List<TalentSnapshotViewModel>();
+                List<string> skillList=null;
+                string currentemployment="";
+                string level="";
+
+                foreach (var user in users)
+                {
+                   var skills= await this.GetSkills(user.Id);
+
+                    if(skills.Count()!=0)
+                    {
+                        skillList = new List<string>();
+                        foreach (var skill in skills)
+                        {
+                            skillList.Add(skill.Name);
+                        }
+                    }
+
+                    var experiences = await this.GetExperience(user.Id);
+                    
+                    if(experiences.Count()!=0)
+                    {
+                        var experience = experiences.LastOrDefault();
+                        currentemployment = experience.Company;
+                        level = experience.Position;
+                    }
+
+                    var result = new TalentSnapshotViewModel
+                    {
+                        Id = user.Id,
+                        Name = user.FirstName,
+                        PhotoId = user.ProfilePhotoUrl,
+                        VideoUrl = string.IsNullOrWhiteSpace(user.VideoName)
+                           ? ""
+                           : await _fileService.GetFileURL(user.VideoName, FileType.UserVideo),
+                        CVUrl = string.IsNullOrWhiteSpace(user.CvName) ? "" : await _fileService.GetFileURL(user.CvName, FileType.UserCV),
+                        Summary = user.Summary,
+                        CurrentEmployment = string.IsNullOrWhiteSpace(currentemployment) ? "" : currentemployment,
+                        Visa = user.VisaStatus,
+                        Level= string.IsNullOrWhiteSpace(level) ? "" : level,
+                        Skills=skillList,
+
+                    };
+
+                    talents.Add(result);
+                }             
+
+                return talents;
+            }
+
+            return null;
         }
 
         public async Task<IEnumerable<TalentSnapshotViewModel>> GetTalentSnapshotList(IEnumerable<string> ids)
@@ -617,9 +804,12 @@ namespace Talent.Services.Profile.Domain.Services
             {
                 Id = skill.Id,
                 Level = skill.ExperienceLevel,
-                Name = skill.Skill
+                Name = skill.Skill,
+                CurrentUserId=skill.UserId
             };
         }
+
+        #region Autherram
         protected AddLanguageViewModel ViewModelFromLaguage(UserLanguage userlanguage)
         {
             return new AddLanguageViewModel
@@ -665,9 +855,11 @@ namespace Talent.Services.Profile.Domain.Services
                 Responsibilities = userExperience.Responsibilities,
                 Start = userExperience.Start,
                 End = userExperience.End,
-                CurrentUserId = userExperience.UserId
+                CurrentUserId=userExperience.UserId
             };
         }
+
+        #endregion
 
         #endregion
 
@@ -698,101 +890,7 @@ namespace Talent.Services.Profile.Domain.Services
         {
             return await _employerRepository.GetByIdAsync(employerId);
         }
-
-        public async Task<bool> AddNewSkill(AddSkillViewModel skill)
-        {
-            //Your code here;
-            //throw new NotImplementedException();
-            try
-            {
-                if (skill.CurrentUserId != null)
-                {
-                    var userskill = new UserSkill();
-                    userskill.Skill = skill.Name;
-                    userskill.ExperienceLevel = skill.Level;
-                    userskill.UserId = (string)skill.CurrentUserId;
-                    userskill.IsDeleted = false;
-                    await _userSkillRepository.Add(userskill);
-                    return true;
-                }
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> DeleteSkill(string id)
-        {
-            //Your code here;
-            //throw new NotImplementedException();
-            try
-            {
-                var skill = await _userSkillRepository.GetByIdAsync(id);
-                if (skill != null)
-                {
-                    skill.IsDeleted = true;
-                    await _userSkillRepository.Update(skill);
-                    return true;
-                }
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> UpdateSkill(AddSkillViewModel skill)
-        {
-            //Your code here;
-            //throw new NotImplementedException();
-            try
-            {
-                var userSkill = await _userSkillRepository.GetByIdAsync(skill.Id);
-                if (userSkill != null)
-                {
-                    userSkill.Id = userSkill.Id;
-                    userSkill.UserId = userSkill.UserId;
-                    userSkill.Skill = skill.Name;
-                    userSkill.ExperienceLevel = skill.Level;
-                    await _userSkillRepository.Update(userSkill);
-                    return true;
-                }
-                return false;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public async Task<IEnumerable<AddSkillViewModel>> GetSkills(string id)
-        {
-            
-            //Distinct used for remove duplicate entities
-            var _userskills = await _userSkillRepository.FindAsync(x => x.UserId == id);
-            var userskills = _userskills.Where(x => !x.IsDeleted)
-                .Select(x => new List<UserSkill>() { x })
-                .SelectMany(x => x).Distinct();
-
-            List<AddSkillViewModel> languages = new List<AddSkillViewModel>();
-
-            foreach (var item in userskills)
-            {
-                languages.Add(ViewModelFromSkill(item));
-            }
-
-
-            return languages;
-
-        }
-
-
-
-
         #endregion
-        
+
     }
 }
